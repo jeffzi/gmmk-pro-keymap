@@ -1,11 +1,12 @@
 BOOTMAGIC_ENABLE = yes
-CONSOLE_ENABLE = yes
+CONSOLE_ENABLE = false
 DEFERRED_EXEC_ENABLE = yes
+EXTRAKEY_ENABLE = yes
 LTO_ENABLE = yes
+MOUSEKEY_ENABLE = no # disable because it can break KVM switch
 NKRO_ENABLE = yes
 OS_DETECTION_ENABLE = yes
-MOUSEKEY_ENABLE = no # disable because it can break KVM switch
-
+RGB_MATRIX_ENABLE = yes
 # source: andrebait config
 # The matrix scan frequency seems to be around 1820 Hz, so even sym_defer_g would perform ok,
 # but the "defer" part would mean we would wait DEBOUNCE ms before sending any events.

@@ -66,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,         _______,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             _______,                      _______,
         _______,         _______,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             QK_BOOT,                      _______,
         _______,         _______,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,                                  _______,                      _______,
-        _______,         RGB_NIGHT,  _______, _______, QK_BOOT, _______, _______, _______, _______, _______, _______,                                           _______,             _______, _______,
+        _______,         RGB_TOG,  _______, _______, QK_BOOT, _______, _______, _______, _______, _______, _______,                                           _______,             _______, _______,
         _______,         WINLOCK,    _______,                   _______,                            _______, _______, _______,                                              _______, _______, _______
     ),
     // clang-format on
@@ -115,18 +115,6 @@ uint32_t set_macos_compatibility(uint32_t trigger_time, void *cb_arg) {
 #endif
 
 #ifdef RGB_MATRIX_ENABLE
-static bool rgb_nightmode = false;
-
-void set_rgb_nightmode(bool enable) {
-    // toggle if state is different
-    if (rgb_nightmode != enable) {
-        rgb_nightmode = enable;
-    }
-}
-
-bool get_rgb_nightmode(void) {
-    return rgb_nightmode;
-}
 
 void set_color_leds(const uint8_t leds[], size_t n_leds, const uint8_t r,
                     const uint8_t g, const uint8_t b) {
@@ -151,8 +139,6 @@ void highlight_gaming(void) {
 }
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    if (get_rgb_nightmode()) rgb_matrix_set_color_all(RGB_OFF);
-
     led_t led_state = host_keyboard_led_state();
 
     // CapsLock RGB setup
@@ -176,10 +162,6 @@ void keyboard_post_init_keymap(void) {
 #    else
     defer_exec(0, NULL);
 #    endif
-#endif
-#ifdef RGB_MATRIX_ENABLE
-    set_rgb_nightmode(false);
-#endif
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -188,17 +170,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case WINLOCK:
             if (record->event.pressed) {
                 keymap_config.no_gui = !keymap_config.no_gui; // toggle status
-            } else
+
+            } else {
                 unregister_code16(keycode);
+            }
             break;
-#ifdef RGB_MATRIX_ENABLE
-        case RGB_NIGHT:
-            if (record->event.pressed) {
-                rgb_nightmode = !rgb_nightmode;
-            } else
-                unregister_code16(keycode);
-            break;
-#endif // RGB_MATRIX_ENABLE
     }
     return true;
 }

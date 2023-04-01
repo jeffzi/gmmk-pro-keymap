@@ -14,22 +14,20 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Note: Many advanced functions referenced in this file are defined in /users/gourdo1/gourdo1.c
-
 #include QMK_KEYBOARD_H
 
 #include "os_detection.h"
 #include "print.h"
+#include "rgb.h"
 
 enum layers { BASE = 0, FN };
+enum my_keycodes { WINLOCK = SAFE_RANGE };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // clang-format off
 
     /* Base Layout
      *
-     * LAlt and Win are automatically swapped on MacOS. This seems to break HYPR which
-     * becomes MEH instead (HYPR without command).
      *
      * ,-------------------------------------------------------------------------------------------------------------.
      * | Esc  ||  F1  |  F2  |  F3  |  F4  ||  F5  |  F6  |  F7  |  F8  ||  F9  | F10  | F11  | F12  || Play || Mute |
@@ -55,21 +53,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // it'll be back to normal when you plug it back in.
     //
      [BASE] = LAYOUT(
-        KC_ESC,          KC_F1,   KC_F2,   KC_F3, KC_F4, KC_F5, KC_F6, KC_F7,  KC_F8,   KC_F9,  KC_F10,  KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PLAY_PAUSE,          KC_MUTE,
-        KC_GRV,          KC_1,    KC_2,    KC_3,  KC_4,  KC_5,  KC_6,  KC_7,   KC_8,    KC_9,   KC_0,    KC_MINS,             KC_EQL,              KC_BSPC,                      KC_DEL,
-        KC_TAB,          KC_Q,    KC_W,    KC_E,  KC_R,  KC_T,  KC_Y,  KC_U,   KC_I,    KC_O,   KC_P,    KC_LBRC,             KC_RBRC,             KC_BSLS,                      KC_PGUP,
-        HYPR_T(KC_CAPS), KC_A,    KC_S,    KC_D,  KC_F,  KC_G,  KC_H,  KC_J,   KC_K,    KC_L,   KC_SCLN, KC_QUOT,                                  KC_ENT,                       KC_PGDN,
-        KC_LSFT,         KC_Z,    KC_X,    KC_C,  KC_V,  KC_B,  KC_N,  KC_M,   KC_COMM, KC_DOT, KC_SLSH,                                           KC_RSFT,             KC_UP,   KC_END,
-        KC_LCTL,         KC_LGUI, KC_LALT,                             KC_SPC,                           KC_RALT,             MO(FN),              KC_RCTL,             KC_LEFT, KC_DOWN, KC_RGHT
+        KC_ESC,          KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PLAY_PAUSE,          KC_MUTE,
+        KC_GRV,          KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,             KC_EQL,              KC_BSPC,                      KC_DEL,
+        KC_TAB,          KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,             KC_RBRC,             KC_BSLS,                      KC_PGUP,
+        HYPR_T(KC_CAPS), KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,                                  KC_ENT,                       KC_PGDN,
+        KC_LSFT,         KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,                                           KC_RSFT,             KC_UP,   KC_END,
+        KC_LCTL,         KC_LGUI, KC_LALT,                   KC_SPC,                             KC_RALT, MO(FN),  KC_RCTL,                                              KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
     [FN] = LAYOUT(
-        _______, KC_F1,     KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,              KC_F12,              KC_SYSTEM_POWER,              _______,
-        _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             _______,                      _______,
-        _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             QK_BOOT,                        _______,
-        _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,                                  _______,                      _______,
-        _______,            _______, _______, _______, QK_BOOT, _______, _______, _______, _______, _______, _______,                                  _______,             _______, _______,
-        _______, _______,   _______,                            _______,                            _______, _______,             _______,             _______,             _______, _______
+        _______,         KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,              KC_F12,              KC_SYSTEM_POWER,              _______,
+        _______,         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             _______,                      _______,
+        _______,         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             QK_BOOT,                      _______,
+        _______,         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,                                  _______,                      _______,
+        _______,         _______, _______, _______, QK_BOOT, _______, _______, _______, _______, _______, _______,                                           _______,             _______, _______,
+        _______,         WINLOCK, _______,                   _______,                            _______, _______, _______,                                              _______, _______, _______
     ),
     // clang-format on
 };
@@ -116,6 +114,56 @@ uint32_t set_macos_compatibility(uint32_t trigger_time, void *cb_arg) {
 }
 #endif
 
+#ifdef RGB_MATRIX_ENABLE
+static bool rgb_nightmode = false;
+
+void set_rgb_nightmode(bool enable) {
+    // toggle if state is different
+    if (rgb_nightmode != enable) {
+        rgb_nightmode = enable;
+    }
+}
+
+bool get_rgb_nightmode(void) {
+    return rgb_nightmode;
+}
+
+void set_color_leds(const uint8_t leds[], size_t n_leds, const uint8_t r,
+                    const uint8_t g, const uint8_t b) {
+    for (uint8_t i = 0; i < n_leds; i++) {
+        rgb_matrix_set_color(leds[i], r, g, b);
+    }
+}
+
+void highlight_capslock(void) {
+    set_color_leds(LED_LETTERS, ARRAY_SIZE(LED_LETTERS), RGB_CHARTREUSE);
+}
+
+void highlight_gaming(void) {
+    set_color_leds(LED_WASD, ARRAY_SIZE(LED_WASD), RGB_CHARTREUSE);
+    set_color_leds(LED_GAMING_WO_WASD, ARRAY_SIZE(LED_GAMING_WO_WASD), RGB_ORANGE2);
+    rgb_matrix_set_color(LED_LWIN, RGB_RED);
+}
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (get_rgb_nightmode()) rgb_matrix_set_color_all(RGB_OFF);
+
+    led_t led_state = host_keyboard_led_state();
+
+    // CapsLock RGB setup
+    if (led_state.caps_lock) {
+        highlight_capslock();
+    }
+
+    // Winkey disabled (gaming) mode RGB setup
+    if (keymap_config.no_gui) {
+        highlight_gaming();
+    }
+
+    return false;
+}
+#endif
+
 void keyboard_post_init_keymap(void) {
 #ifdef OS_DETECTION_ENABLE
 #    if defined(DEFERRED_EXEC_ENABLE)
@@ -124,4 +172,20 @@ void keyboard_post_init_keymap(void) {
     defer_exec(0, NULL);
 #    endif
 #endif
+#ifdef RGB_MATRIX_ENABLE
+    set_rgb_nightmode(false);
+#endif
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        // Windows Key lockout
+        case WINLOCK:
+            if (record->event.pressed) {
+                keymap_config.no_gui = !keymap_config.no_gui; // toggle status
+            } else
+                unregister_code16(keycode);
+            break;
+    }
+    return true;
 }

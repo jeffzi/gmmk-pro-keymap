@@ -142,9 +142,11 @@ void highlight_capslock(void) {
 }
 
 void highlight_gaming(void) {
-    rgb_matrix_set_color_all(RGB_OFF);
-    set_color_leds(LED_WASD, ARRAY_SIZE(LED_WASD), RGB_WHITE);
+    rgb_matrix_set_color_all(RGB_WHITE);
+    set_color_leds(LED_WASD, ARRAY_SIZE(LED_WASD), RGB_PINK_BRIGHT);
     set_color_leds(LED_GAMING_WO_WASD, ARRAY_SIZE(LED_GAMING_WO_WASD), RGB_NAUTILUS);
+    set_color_leds(LED_SIDE_LEFT, ARRAY_SIZE(LED_SIDE_LEFT), RGB_PINK_BRIGHT);
+    set_color_leds(LED_SIDE_RIGHT, ARRAY_SIZE(LED_SIDE_RIGHT), RGB_PINK_BRIGHT);
     rgb_matrix_set_color(LED_LWIN, RGB_RED);
 }
 

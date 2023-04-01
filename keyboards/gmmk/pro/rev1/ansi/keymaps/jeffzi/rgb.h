@@ -144,11 +144,11 @@ enum led_location_map {
     LED_R7,    // 88, LED, l17
     LED_RBRC,  // 89, ], k61
     LED_RSFT,  // 90, Sh_R, k91
-    LED_L8,    // 91, LED, l08
+    LED_L8,    // 91, LED, l08s
     LED_R8,    // 92, LED, l18
     LED_BSLS,  // 93, \, ka2
     LED_UP,    // 94, Up, k35
-    LED_LEFT,  // 95, Left, k03
+    LED_LEFT,  // 95, Left, k03s
     LED_ENT,   // 96, Enter, ka4
     LED_DOWN   // 97, Down, k73
 };
@@ -158,9 +158,11 @@ const uint8_t LED_CAPSLOCK[] = {
     LED_Q, LED_W, LED_E, LED_R, LED_T, LED_Y, LED_U,  LED_I,  LED_O,    LED_P,
     LED_A, LED_S, LED_D, LED_F, LED_G, LED_H, LED_J,  LED_K,  LED_L,    LED_Z,
     LED_X, LED_C, LED_V, LED_B, LED_N, LED_M, LED_L7, LED_L8, LED_LSFT, LED_RSFT};
-const uint8_t LED_GAMING_WO_WASD[] = {LED_1,   LED_2,   LED_3,    LED_4,  LED_C, LED_D,
-                                      LED_E,   LED_F,   LED_Q,    LED_S,  LED_V, LED_X,
-                                      LED_TAB, LED_SPC, LED_LSFT, KC_LCTL};
+const uint8_t LED_GAMING_WO_WASD[] = {
+    LED_ESC,  LED_F1,  LED_F2,   LED_F3, LED_F4,    LED_GRV,  LED_1,
+    LED_2,    LED_3,   LED_4,    LED_Q,  LED_E,     LED_R,    LED_F,
+    LED_Z,    LED_X,   LED_C,    LED_V,  LED_TAB,   LED_CAPS, LED_LSFT,
+    LED_LCTL, LED_SPC, LED_LEFT, LED_UP, LED_RIGHT, LED_DOWN};
 
 const uint8_t LED_ARROWS[] = {LED_LEFT, LED_RIGHT, LED_UP, LED_DOWN};
 

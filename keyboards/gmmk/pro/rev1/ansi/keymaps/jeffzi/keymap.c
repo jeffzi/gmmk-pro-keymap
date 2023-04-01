@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "rgb.h"
 
 enum layers { BASE = 0, FN };
-enum my_keycodes { WINLOCK = SAFE_RANGE };
+enum my_keycodes { WINLOCK = SAFE_RANGE, RGB_NIGHT };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // clang-format off
@@ -53,21 +53,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // it'll be back to normal when you plug it back in.
     //
      [BASE] = LAYOUT(
-        KC_ESC,          KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PLAY_PAUSE,          KC_MUTE,
-        KC_GRV,          KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,             KC_EQL,              KC_BSPC,                      KC_DEL,
-        KC_TAB,          KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,             KC_RBRC,             KC_BSLS,                      KC_PGUP,
-        HYPR_T(KC_CAPS), KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,                                  KC_ENT,                       KC_PGDN,
-        KC_LSFT,         KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,                                           KC_RSFT,             KC_UP,   KC_END,
-        KC_LCTL,         KC_LGUI, KC_LALT,                   KC_SPC,                             KC_RALT, MO(FN),  KC_RCTL,                                              KC_LEFT, KC_DOWN, KC_RGHT
+        KC_ESC,          KC_F1,      KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PLAY_PAUSE,          KC_MUTE,
+        KC_GRV,          KC_1,       KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,             KC_EQL,              KC_BSPC,                      KC_DEL,
+        KC_TAB,          KC_Q,       KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,             KC_RBRC,             KC_BSLS,                      KC_PGUP,
+        HYPR_T(KC_CAPS), KC_A,       KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,                                  KC_ENT,                       KC_PGDN,
+        KC_LSFT,         KC_Z,       KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,                                           KC_RSFT,             KC_UP,   KC_END,
+        KC_LCTL,         KC_LGUI,    KC_LALT,                   KC_SPC,                             KC_RALT, MO(FN),  KC_RCTL,                                              KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
     [FN] = LAYOUT(
-        _______,         KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,              KC_F12,              KC_SYSTEM_POWER,              _______,
-        _______,         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             _______,                      _______,
-        _______,         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             QK_BOOT,                      _______,
-        _______,         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,                                  _______,                      _______,
-        _______,         _______, _______, _______, QK_BOOT, _______, _______, _______, _______, _______, _______,                                           _______,             _______, _______,
-        _______,         WINLOCK, _______,                   _______,                            _______, _______, _______,                                              _______, _______, _______
+        _______,         KC_F1,      KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,              KC_F12,              KC_SYSTEM_POWER,              _______,
+        _______,         _______,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             _______,                      _______,
+        _______,         _______,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             QK_BOOT,                      _______,
+        _______,         _______,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,                                  _______,                      _______,
+        _______,         RGB_NIGHT,  _______, _______, QK_BOOT, _______, _______, _______, _______, _______, _______,                                           _______,             _______, _______,
+        _______,         WINLOCK,    _______,                   _______,                            _______, _______, _______,                                              _______, _______, _______
     ),
     // clang-format on
 };
@@ -140,8 +140,9 @@ void highlight_capslock(void) {
 }
 
 void highlight_gaming(void) {
-    set_color_leds(LED_WASD, ARRAY_SIZE(LED_WASD), RGB_CHARTREUSE);
-    set_color_leds(LED_GAMING_WO_WASD, ARRAY_SIZE(LED_GAMING_WO_WASD), RGB_ORANGE2);
+    rgb_matrix_set_color_all(RGB_OFF);
+    set_color_leds(LED_WASD, ARRAY_SIZE(LED_WASD), RGB_WHITE);
+    set_color_leds(LED_GAMING_WO_WASD, ARRAY_SIZE(LED_GAMING_WO_WASD), RGB_NAUTILUS);
     rgb_matrix_set_color(LED_LWIN, RGB_RED);
 }
 
@@ -186,6 +187,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else
                 unregister_code16(keycode);
             break;
+#ifdef RGB_MATRIX_ENABLE
+        case RGB_NIGHT:
+            if (record->event.pressed) {
+                rgb_nightmode = !rgb_nightmode;
+            } else
+                unregister_code16(keycode);
+            break;
+#endif // RGB_MATRIX_ENABLE
     }
     return true;
 }

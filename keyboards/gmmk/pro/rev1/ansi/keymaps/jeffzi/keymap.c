@@ -130,7 +130,6 @@ void highlight_capslock(void) {
 }
 
 void highlight_gaming(void) {
-    rgb_matrix_set_color_all(RGB_WHITE);
     set_color_leds(LED_WASD, ARRAY_SIZE(LED_WASD), RGB_PINK_BRIGHT);
     set_color_leds(LED_GAMING_WO_WASD, ARRAY_SIZE(LED_GAMING_WO_WASD), RGB_NAUTILUS);
     set_color_leds(LED_SIDE_LEFT, ARRAY_SIZE(LED_SIDE_LEFT), RGB_PINK_BRIGHT);
@@ -162,6 +161,11 @@ void keyboard_post_init_keymap(void) {
 #    else
     defer_exec(0, NULL);
 #    endif
+#endif
+#ifdef RGB_MATRIX_ENABLE
+    rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_set_color_all(RGB_NAUTILUS);
+#endif
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {

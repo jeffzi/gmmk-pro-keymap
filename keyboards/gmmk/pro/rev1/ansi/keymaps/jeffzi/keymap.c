@@ -136,7 +136,9 @@ void set_color_leds(const uint8_t leds[], size_t n_leds, const uint8_t r,
 }
 
 void highlight_capslock(void) {
-    set_color_leds(LED_LETTERS, ARRAY_SIZE(LED_LETTERS), RGB_CHARTREUSE);
+    set_color_leds(LED_CAPSLOCK, ARRAY_SIZE(LED_CAPSLOCK), RGB_CHARTREUSE);
+    set_color_leds(LED_SIDE_LEFT, ARRAY_SIZE(LED_SIDE_LEFT), RGB_CHARTREUSE);
+    set_color_leds(LED_SIDE_RIGHT, ARRAY_SIZE(LED_SIDE_RIGHT), RGB_CHARTREUSE);
 }
 
 void highlight_gaming(void) {

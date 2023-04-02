@@ -15,12 +15,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
-
 #include "os_detection.h"
 #include "print.h"
 #include "rgb.h"
 
-enum layers { BASE = 0, FN };
+enum layers { MAC = 0, WIN, FN };
 enum my_keycodes { WINLOCK = SAFE_RANGE, RGB_NIGHT };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -52,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // To put the keyboard in bootloader mode, use FN+backslash. If you accidentally put it into bootloader, you can just unplug the USB cable and
     // it'll be back to normal when you plug it back in.
     //
-     [BASE] = LAYOUT(
+     [WIN] = LAYOUT(
         KC_ESC,          KC_F1,      KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PLAY_PAUSE,          KC_MUTE,
         KC_GRV,          KC_1,       KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,             KC_EQL,              KC_BSPC,                      KC_DEL,
         KC_TAB,          KC_Q,       KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,             KC_RBRC,             KC_BSLS,                      KC_PGUP,
@@ -61,12 +60,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LCTL,         KC_LGUI,    KC_LALT,                   KC_SPC,                             KC_RALT, MO(FN),  KC_RCTL,                                              KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
+     [MAC] = LAYOUT(
+        KC_ESC,          KC_F1,      KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PLAY_PAUSE,          KC_MUTE,
+        KC_GRV,          KC_1,       KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,             KC_EQL,              KC_BSPC,                      KC_DEL,
+        KC_TAB,          KC_Q,       KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,             KC_RBRC,             KC_BSLS,                      KC_PGUP,
+        HYPR_T(KC_CAPS), KC_A,       KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,                                  KC_ENT,                       KC_PGDN,
+        KC_LSFT,         KC_Z,       KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,                                           KC_RSFT,             KC_UP,   KC_END,
+        KC_LCTL,         KC_LALT,    KC_LGUI,                   KC_SPC,                             KC_RALT, MO(FN),  KC_RCTL,                                              KC_LEFT, KC_DOWN, KC_RGHT
+    ),
+
     [FN] = LAYOUT(
         _______,         KC_F1,      KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,              KC_F12,              KC_SYSTEM_POWER,              _______,
         _______,         _______,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             _______,                      _______,
         _______,         _______,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,             _______,             QK_BOOT,                      _______,
         _______,         _______,    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,                                  _______,                      _______,
-        _______,         RGB_TOG,  _______, _______, QK_BOOT, _______, _______, _______, _______, _______, _______,                                           _______,             _______, _______,
+        _______,         RGB_TOG,    _______, _______, QK_BOOT, _______, _______, _______, _______, _______, _______,                                           _______,             _______, _______,
         _______,         WINLOCK,    _______,                   _______,                            _______, _______, _______,                                              _______, _______, _______
     ),
     // clang-format on
@@ -88,9 +96,6 @@ os_variant_t os_type;
 uint32_t set_macos_compatibility(uint32_t trigger_time, void *cb_arg) {
     os_type = detected_host_os();
     if (os_type) {
-        bool is_mac                  = (os_type == OS_MACOS) || (os_type == OS_IOS);
-        keymap_config.swap_lalt_lgui = is_mac;
-
         switch (os_type) {
             case OS_UNSURE:
                 dprint("unknown OS Detected\n");
@@ -107,6 +112,17 @@ uint32_t set_macos_compatibility(uint32_t trigger_time, void *cb_arg) {
             case OS_IOS:
                 dprint("iOS Detected\n");
                 break;
+        }
+        bool is_mac = (os_type == OS_MACOS) || (os_type == OS_IOS);
+        // keymap_config.swap_lalt_lgui = is_mac;
+        if (is_mac) {
+            default_layer_set(MAC);
+            layer_on(MAC);
+            layer_off(WIN);
+        } else {
+            default_layer_set(WIN);
+            layer_on(WIN);
+            layer_off(MAC);
         }
     }
 

@@ -14,7 +14,4 @@ RGB_MATRIX_ENABLE = yes
 # The GMMK Pro has more then enough system resources for a per-key algorithm.
 # Using an "eager" algorithm leads to extremely low latency while also reducing the chances of chattering
 # due to it's "post-event" debouncing (of sorts).
-#
-# I have observed zero chattering or double-keypress issues on my Gateron Yellow switches.
-# Most chattering issues on the GMMK Pro seem to be related to its proprietary hot-swap sockets anyway.
 DEBOUNCE_TYPE = sym_eager_pk

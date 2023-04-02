@@ -154,20 +154,6 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 }
 #endif
 
-void keyboard_post_init_keymap(void) {
-#ifdef OS_DETECTION_ENABLE
-#    if defined(DEFERRED_EXEC_ENABLE)
-    defer_exec(100, set_macos_compatibility, NULL);
-#    else
-    defer_exec(0, NULL);
-#    endif
-#endif
-#ifdef RGB_MATRIX_ENABLE
-    rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
-    rgb_matrix_set_color_all(RGB_NAUTILUS);
-#endif
-}
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         // Windows Key lockout
@@ -181,4 +167,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
     }
     return true;
+}
+
+void keyboard_post_init_user(void) {
+#ifdef OS_DETECTION_ENABLE
+#    if defined(DEFERRED_EXEC_ENABLE)
+    defer_exec(100, set_macos_compatibility, NULL);
+#    else
+    defer_exec(0, NULL);
+#    endif
+
+#endif
+    rgblight_mode_noeeprom(RGB_MATRIX_SOLID_REACTIVE);
 }

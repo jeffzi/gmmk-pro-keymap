@@ -1,7 +1,9 @@
 #pragma once
 
-// Force n-key rollover
 #define FORCE_NKRO
+
+#define LCPO_KEYS KC_LCTL, KC_LSFT, KC_LBRC // Left Control when held, { when tapped
+#define RCPC_KEYS KC_RCTL, KC_RSFT, KC_RBRC // Right Control when held, } when tapped
 
 #ifdef RGB_MATRIX_ENABLE
 #    define RGB_DISABLE_WHEN_USB_SUSPENDED
